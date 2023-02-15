@@ -4,20 +4,32 @@ function _init()
 	player_position_y = 64
     player_speed_x = 0
     player_speed_y = 0
+    player_sprite = 2
+    exhaust_sprite = 5
     projectile_position_x = 64
-    projectile_position_y = 40
+    projectile_position_y = -10
     projectile_speed = 3
     normalize = 0.7
 end
 
 function _update()
-    -- Player Character Controls - Movement
+    -- Reset To Default State
     player_speed_x = 0
     player_speed_y = 0
-    if (btn(0)) then player_speed_x = -2 end
-    if (btn(1)) then player_speed_x = 2 end
+    player_sprite = 2
+
+    -- Player Character Controls - Movement
+    if (btn(0)) then 
+        player_speed_x = -2 
+        player_sprite = 1
+    end
+    if (btn(1)) then 
+        player_speed_x = 2 
+        player_sprite = 3
+    end
     if (btn(2)) then player_speed_y = -2 end
     if (btn(3)) then player_speed_y = 2 end
+    
     player_position_x = player_position_x + player_speed_x
     player_position_y = player_position_y + player_speed_y
     
@@ -29,8 +41,13 @@ function _update()
         projectile_position_y = player_position_y - 3
         sfx(0)
     end
+    
     projectile_position_y = projectile_position_y - projectile_speed
     
+    -- Exhaust Animation
+    exhaust_sprite = exhaust_sprite + 1
+    if (exhaust_sprite > 9) then exhaust_sprite = 5 end
+
     -- Out Of Bounds (OOB) Prevention
     if player_position_x < 0 then player_position_x = 0 end
     if player_position_x > 120 then player_position_x = 120 end 
@@ -40,6 +57,10 @@ end
 
 function _draw()
 	cls()
-	spr(1,player_position_x,player_position_y)
-    spr(3, projectile_position_x, projectile_position_y)
+    -- Player Sprite
+	spr(player_sprite,player_position_x,player_position_y)
+    -- Exhaust Sprite
+    spr(exhaust_sprite,player_position_x,player_position_y+8)
+    -- Projectile Sprite
+    spr(16, projectile_position_x, projectile_position_y-5)
 end
