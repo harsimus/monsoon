@@ -9,6 +9,7 @@ function _init()
     projectile_position_x = 64
     projectile_position_y = -10
     projectile_speed = 3
+    muzzle = 0
     normalize = 0.7
 end
 
@@ -40,6 +41,7 @@ function _update()
         projectile_position_x = player_position_x
         projectile_position_y = player_position_y - 3
         sfx(0)
+        muzzle = 5
     end
     
     projectile_position_y = projectile_position_y - projectile_speed
@@ -47,6 +49,11 @@ function _update()
     -- Exhaust Animation
     exhaust_sprite = exhaust_sprite + 1
     if (exhaust_sprite > 9) then exhaust_sprite = 5 end
+
+    -- Muzzle Flash Animation
+    if (muzzle > 0) then
+        muzzle = muzzle - 1
+    end
 
     -- Out Of Bounds (OOB) Prevention
     if player_position_x < 0 then player_position_x = 0 end
@@ -63,4 +70,8 @@ function _draw()
     spr(exhaust_sprite,player_position_x,player_position_y+8)
     -- Projectile Sprite
     spr(16, projectile_position_x, projectile_position_y-5)
+    -- Muzzle Flare
+    if (muzzle) > 0 then
+        circfill(player_position_x+3, player_position_y-2, muzzle, 7)
+    end
 end
